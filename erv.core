@@ -1,0 +1,86 @@
+CAPI=2:
+name: ::erv:0.0.1
+description: Testing FuseSoc
+
+filesets:
+  rtl:
+    files:
+      - rtl/package.sv
+      - rtl/top.sv
+      - rtl/program_counter.sv
+      - rtl/decoder.sv
+      - rtl/register_file.sv
+      - rtl/alu.sv
+      - rtl/imem.sv
+    file_type: systemVerilogSource
+
+  tb:
+    files:
+      - test/top_tb.sv
+      - test/program_counter_tb.sv
+      - test/decoder_tb.sv
+      - test/register_file_tb.sv
+    file_type: systemVerilogSource
+
+  fw:
+    files:
+      - test/software/add_test.mem
+
+  xsim:
+    files:
+      - test/xsim_script.tcl
+
+  basys3:
+    files:
+      - boards/basys3.xdc: {file_type: xdc}
+
+targets:
+  default: &default
+    filesets:
+      - rtl
+    toplevel: top
+
+  top:
+    <<: *default
+    description: Synthesize the design
+    filesets_append:
+      - basys3
+    default_tool: vivado
+    tools:
+      vivado:
+        part: xc7a35tcpg236-1
+        pnr: vivado
+
+  sim: &sim
+    <<: *default
+    description: Base simulation
+    default_tool: xsim
+    tools:
+      xsim:
+        xelab_options: [-debug typical]
+        xsim_options: [-t ../src/erv_0.0.1/test/xsim_script.tcl]
+    filesets_append:
+      - tb
+      - xsim
+      - fw
+    toplevel: top
+
+  sim_pc:
+    <<: *sim
+    description: Simulate the program counter
+    toplevel: program_counter_tb
+
+  sim_decoder:
+    <<: *sim
+    description: Simulate the decoder
+    toplevel: decoder_tb
+
+  sim_reg_file:
+    <<: *sim
+    description: Simulate the register file
+    toplevel: register_file_tb
+  
+  sim_top:
+    <<: *sim
+    description: Simulate RV32i core
+    toplevel: top_tb
