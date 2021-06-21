@@ -1,0 +1,5 @@
+[option]
+exclude_paths = ["test/.*"]
+
+[rules]
+default_nettype_none = false
