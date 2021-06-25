@@ -1,5 +1,5 @@
 CAPI=2:
-name: ::erv:0.0.1
+name: ::rv32:0.0.1
 description: Testing FuseSoc
 
 filesets:
@@ -12,6 +12,7 @@ filesets:
       - rtl/register_file.sv
       - rtl/alu.sv
       - rtl/imem.sv
+      - rtl/dmem.sv
     file_type: systemVerilogSource
 
   tb:
@@ -24,7 +25,7 @@ filesets:
 
   fw:
     files:
-      - test/software/add_test.mem
+      - test/software/programs/test.mem
 
   xsim:
     files:
@@ -58,7 +59,7 @@ targets:
     tools:
       xsim:
         xelab_options: [-debug typical]
-        xsim_options: [-t ../src/erv_0.0.1/test/xsim_script.tcl]
+        xsim_options: [-t ../src/rv32_0.0.1/test/xsim_script.tcl]
     filesets_append:
       - tb
       - xsim
