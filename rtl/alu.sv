@@ -3,19 +3,28 @@ module alu
 (
     input logic [31:0] op1,
     input logic [31:0] op2,
-    input logic [31:0] imm, // Replace with mux
-    input RV32_INSTRUCTION opcode,
+    input RV32_ALU_OPCODE opcode,
     output logic [31:0] result
 );
 
   always_comb begin
-    unique casex(opcode)
-      ADD: result = op1 + op2;
-      ADDI: result = op1 + imm;
-      default: result = 'x;
-    endcase 
-    $display("op %d, op1 %d, imm %d and res %d vs %d",
-      opcode, op1, imm, result, op1 + imm);
+    unique case (opcode)
+      ALU_SLL:  res = rs1 << rs2[4:0];
+      ALU_SRL:  res = rs1 >> rs2[4:0];
+      ALU_SRA:  res = $signed(rs1) >>> rs2[4:0];
+      ALU_ADD:  res = rs1 + rs2;
+      ALU_SUB:  res = rs1 - rs2;
+      ALU_XOR:  res = rs1 ^ rs2;
+      ALU_OR:   res = rs1 | rs2;
+      ALU_AND:  res = rs1 & rs2;
+      ALU_SLT:  res = {31'b0, $signed(rs1) < $signed(rs2)};
+      ALU_SLTU: res = {31'b0, rs1 < rs2};
+      ALU_SBT:  res = {31'b0, $signed(rs1) >= $signed(rs2)};
+      ALU_SBTU: res = {31'b0, rs1 >= rs2};
+      ALU_EQ:   res = {31'b0, rs1 == rs2};
+      ALU_NEQ:  res = {31'b0, rs1 != rs2};
+      default:  res = 'x;
+    endcase
   end
 
 endmodule
