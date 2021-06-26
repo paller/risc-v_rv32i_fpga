@@ -12,11 +12,6 @@ module register_file (
 
   logic [31:0] register[32];
 
-  always_comb begin
-    data_out1 = register[rs1];
-    data_out2 = register[rs2];
-  end
-
   always_ff @(posedge clk, negedge rstN) begin
     if (!rstN) begin
       for (int x = 0; x < 32; x++) begin
@@ -24,6 +19,8 @@ module register_file (
       end
     end else begin
       if (we && (rd != 0)) register[rd] <= data_in;
+      data_out1 <= register[rs1];
+      data_out2 <= register[rs2];
     end
   end
 endmodule

@@ -54,4 +54,10 @@ package rv;
     ALU_NOP  = 4'd15
   } RV32_ALU_OPCODE;
 
+  typedef enum logic
+  {
+    RS2 = 1'b0,
+    IMM = 1'b1
+  } RV32_ALU_INPUT;
+
 endpackage

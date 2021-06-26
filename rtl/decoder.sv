@@ -7,34 +7,35 @@ module decoder
     output logic            [ 4:0] rd,
     output logic                   rd_we,
     output logic            [31:0] imm,
-    output RV32_INSTRUCTION        alu_opcode
+    output RV32_INSTRUCTION        alu_opcode,
+    output RV32_ALU_INPUT          alu_second_input
 );
-
 
   // Extract fields
   assign rd  = instruction[11:07];
   assign rs1 = instruction[19:15];
   assign rs2 = instruction[24:20];
-  wire [4:0] opcode = instruction[06:02];
+  wire [6:0] opcode = instruction[06:00];
   wire [2:0] funct3 = instruction[14:12];
   wire [6:0] funct7 = instruction[31:25];
 
   // Instruction type
-  wire is_i_instr = opcode inside {5'b00000, 5'b00001, 5'b00100, 5'b00110, 5'b11001};
-  wire is_r_instr = opcode inside {5'b01011, 5'b01100, 5'b01110, 5'b10100};
-  wire is_u_instr = opcode inside {5'b00101, 5'b01101};
-  wire is_s_instr = opcode inside {5'b01000, 5'b01001};
-  wire is_b_instr = opcode inside {5'b11000};
-  wire is_j_instr = opcode inside {5'b11011};
+  wire is_i_instr = opcode inside {5'b0000111, 5'b0010011, 5'b0011011, 5'b1100111};
+  wire is_r_instr = opcode inside {5'b0101111, 5'b0110011, 5'b0111011, 5'b1010011};
+  wire is_u_instr = opcode inside {5'b0010111, 5'b0110111};
+  wire is_s_instr = opcode inside {5'b0000011, 5'b0100011, 5'b0100111};
+  wire is_b_instr = opcode inside {5'b1100011};
+  wire is_j_instr = opcode inside {5'b1101111};
 
   // Valid fields
-  wire rd_valid = (is_r_instr || is_i_instr || is_u_instr || is_j_instr);
+  wire rd_valid  = (is_r_instr || is_i_instr || is_u_instr || is_j_instr);
   wire rs1_valid = (is_r_instr || is_i_instr || is_s_instr || is_b_instr);
   wire rs2_valid = (is_r_instr || is_s_instr || is_b_instr);
   wire imm_valid = !is_r_instr;
   wire funct3_valid = rs1_valid;
   wire funct7_valid = is_r_instr;
 
+  // TODO: This is wrong
   always_comb begin
     rd_we = rd_valid;
   end
@@ -63,7 +64,21 @@ module decoder
     endcase
   end
 
-  assign alu_opcode = RV32_INSTRUCTION'({instruction[30], funct3, opcode});
+  assign alu_opcode = RV32_INSTRUCTION'({funct3, opcode});
+  
+  always_comb begin
+    alu_second_input = RS2;
+    we = 1'b0;
+
+    case(alu_opcode)
+      ADDI, SLTI, ANDI, ORI, XORI: begin
+        alu_second_input = IMM;
+        we = 1'b1;
+      end
+    endcase
+  end
+
+  /*
   wire is_beq = alu_opcode ==? BEQ;
   wire is_bne = alu_opcode ==? BNE;
   wire is_blt = alu_opcode ==? BLT;
@@ -72,5 +87,6 @@ module decoder
   wire is_bgeu = alu_opcode ==? BGEU;
   wire is_addi = alu_opcode ==? ADDI;
   wire is_add = alu_opcode ==? ADD;
+  */
 
 endmodule

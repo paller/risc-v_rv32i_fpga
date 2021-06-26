@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="rv32_0.0.1.wdb" id="1">
+         <top_modules>
+            <top_module name="rv" />
+            <top_module name="top_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="94001fs"></ZoomEndTime>
+      <Cursor1Time time="12600fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="76"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="6" />
+   <wvobject type="logic" fp_name="/top_tb/rstN">
+      <obj_property name="ElementShortName">rstN</obj_property>
+      <obj_property name="ObjectShortName">rstN</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/top_tb/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_tb/top/program_counter/pc">
+      <obj_property name="ElementShortName">pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_tb/top/imem/data">
+      <obj_property name="ElementShortName">data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_tb/top/decoder/alu_opcode">
+      <obj_property name="ElementShortName">alu_opcode[10:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_opcode[10:0]</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group15">
+      <obj_property name="label">REG</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="divider16" type="divider">
+         <obj_property name="label">Out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/rs1">
+         <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+         <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/data_out1">
+         <obj_property name="ElementShortName">data_out1[31:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out1[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/rs2">
+         <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+         <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/data_out2">
+         <obj_property name="ElementShortName">data_out2[31:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out2[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider14" type="divider">
+         <obj_property name="label">In</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/top_tb/top/register_file/we">
+         <obj_property name="ElementShortName">we</obj_property>
+         <obj_property name="ObjectShortName">we</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/rd">
+         <obj_property name="ElementShortName">rd[4:0]</obj_property>
+         <obj_property name="ObjectShortName">rd[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/top_tb/top/register_file/data_in">
+         <obj_property name="ElementShortName">data_in[31:0]</obj_property>
+         <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

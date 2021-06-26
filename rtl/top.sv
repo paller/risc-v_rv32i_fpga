@@ -1,13 +1,10 @@
 module top
   (
-    //input logic rstN,
-    input logic clk,
-    output logic led
+    input logic rstN,
+    input logic clk
 );
   import rv::*;
   
-  wire rstN = 1;
-
   // Program counter
   wire [31:0] pc;
   // Imem
@@ -18,6 +15,8 @@ module top
   wire [ 4:0] rd;
   wire [31:0] imm;
   wire RV32_INSTRUCTION alu_opcode;
+  wire alu_imm_input;
+  
   // Register file
   wire        we;
   wire [31:0] op1;
@@ -31,10 +30,8 @@ module top
       .pc  (pc)
   );
 
-  imem imem (.clk(clk), .data_in(instruction),
-  .we(we), .pc(pc), .data(instruction));
-  assign led = instruction[0];
-  // we very wrong!
+  imem imem (.clk(clk), .pc(pc), .data(instruction));
+  dmem dmem (.clk(clk), .wr_en(!we), .addr(op1 + imm), .data_in(op2));
   
   decoder decoder (
       .instruction(instruction),
@@ -43,7 +40,8 @@ module top
       .rd(rd),
       .rd_we(we),
       .imm(imm),
-      .alu_opcode(alu_opcode)
+      .alu_opcode(alu_opcode),
+      .alu_second_input(alu_imm_input)
   );
 
   register_file register_file (
@@ -53,14 +51,14 @@ module top
       .rs2(rs2),
       .rd(rd),
       .we(we),
-      .data_in(alu_result), // Missing MUX
+      .data_in(imm), // Missing MUX
       .data_out1(op1),
       .data_out2(op2)
   );
 
   alu alu (
       .op1(op1),
-      .op2(op2),
+      .op2(alu_imm_input ? imm : op2),
       .imm(imm),
       .opcode(alu_opcode),
       .result(alu_result)
