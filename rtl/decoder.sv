@@ -7,7 +7,7 @@ module decoder
     output logic            [ 4:0] rd,
     output logic                   rd_we,
     output logic            [31:0] imm,
-    output RV32_INSTRUCTION        alu_opcode,
+    output RV32_ALU_OPCODE         funct3,
     output RV32_ALU_INPUT          alu_second_input
 );
 
@@ -15,17 +15,18 @@ module decoder
   assign rd  = instruction[11:07];
   assign rs1 = instruction[19:15];
   assign rs2 = instruction[24:20];
-  wire [6:0] opcode = instruction[06:00];
-  wire [2:0] funct3 = instruction[14:12];
+  assign funct3 = RV32_ALU_OPCODE'(instruction[14:12]);
+  RV32_INSTRUCTION_OPCODE opcode = RV32_INSTRUCTION_OPCODE'(instruction[06:00]);
   wire [6:0] funct7 = instruction[31:25];
 
   // Instruction type
-  wire is_i_instr = opcode inside {5'b0000111, 5'b0010011, 5'b0011011, 5'b1100111};
-  wire is_r_instr = opcode inside {5'b0101111, 5'b0110011, 5'b0111011, 5'b1010011};
-  wire is_u_instr = opcode inside {5'b0010111, 5'b0110111};
-  wire is_s_instr = opcode inside {5'b0000011, 5'b0100011, 5'b0100111};
-  wire is_b_instr = opcode inside {5'b1100011};
-  wire is_j_instr = opcode inside {5'b1101111};
+  // TODO: Update with enum types
+  wire is_i_instr = opcode inside {7'b0000111, 7'b0010011, 7'b0011011, 7'b1100111};
+  wire is_r_instr = opcode inside {7'b0101111, 7'b0110011, 7'b0111011, 7'b1010011};
+  wire is_u_instr = opcode inside {7'b0010111, 7'b0110111};
+  wire is_s_instr = opcode inside {7'b0000011, 7'b0100011, 7'b0100111};
+  wire is_b_instr = opcode inside {7'b1100011};
+  wire is_j_instr = opcode inside {7'b1101111};
 
   // Valid fields
   wire rd_valid  = (is_r_instr || is_i_instr || is_u_instr || is_j_instr);
@@ -34,11 +35,6 @@ module decoder
   wire imm_valid = !is_r_instr;
   wire funct3_valid = rs1_valid;
   wire funct7_valid = is_r_instr;
-
-  // TODO: This is wrong
-  always_comb begin
-    rd_we = rd_valid;
-  end
 
   // Immediates for I, S, B, U and J instructions
   wire [31:0] imm_i = {{11{instruction[31]}}, instruction[30:20]};
@@ -67,13 +63,13 @@ module decoder
   assign alu_opcode = RV32_INSTRUCTION'({funct3, opcode});
   
   always_comb begin
-    alu_second_input = RS2;
-    we = 1'b0;
+    alu_second_input = ALU_MUX_RS2;
+    rd_we = 1'b0;
 
-    case(alu_opcode)
-      ADDI, SLTI, ANDI, ORI, XORI: begin
-        alu_second_input = IMM;
-        we = 1'b1;
+    case(opcode)
+      IMM: begin
+        alu_second_input = ALU_MUX_IMM;
+        rd_we = 1'b1;
       end
     endcase
   end

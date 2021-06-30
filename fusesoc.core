@@ -63,7 +63,7 @@ targets:
     filesets_append:
       - tb
       - xsim
-      - fw
+      #- fw
     toplevel: top
 
   sim_pc:

@@ -1,63 +1,68 @@
 package rv;
-  typedef enum logic [9:0] {
-    LUI   = 10'bxxx_0110111,
-    AUIPC = 10'bxxx_0010111,
-    JAL   = 10'bxxx_1101111,
-    JALR  = 10'b000_1100111,
-    BEQ   = 10'b000_1100011,
-    BNE   = 10'b001_1100011,
-    BLT   = 10'b100_1100011,
-    BGE   = 10'b101_1100011,
-    BLTU  = 10'b110_1100011,
-    BGEU  = 10'b111_1100011,
-    LB    = 10'b000_0000011,
-    LH    = 10'b001_0000011,
-    LW    = 10'b010_0000011,
-    LBU   = 10'b100_0000011,
-    LHU   = 10'b101_0000011,
-    SB    = 10'b000_0100011,
-    SH    = 10'b001_0100011,
-    SW    = 10'b010_0100011,
-    ADDI  = 10'b000_0010011,
-    SLTI  = 10'b010_0010011,
-    SLTIU = 10'b011_0010011,
-    XORI  = 10'b100_0010011,
-    ORI   = 10'b110_0010011,
-    ANDI  = 10'b111_0010011,
-    SLLI  = 10'b001_0010011,
-    SRxI  = 10'b101_0010011,
-    ADD   = 10'b000_0110110,
-    SLL   = 10'b001_0110011,
-    SLT   = 10'b010_0110011,
-    SLTU  = 10'b011_0110011,
-    XOR   = 10'b100_0110011,
-    SRx   = 10'b101_0110011,
-    OR    = 10'b110_0110011,
-    AND   = 10'b111_0110011
-  } RV32_INSTRUCTION;
 
-  typedef enum logic [3:0] {
-    ALU_SLL  = 4'd00,
-    ALU_SRL  = 4'd01,
-    ALU_SRA  = 4'd02,
-    ALU_ADD  = 4'd03,
-    ALU_SUB  = 4'd04,
-    ALU_XOR  = 4'd05,
-    ALU_OR   = 4'd06,
-    ALU_AND  = 4'd07,
-    ALU_SLT  = 4'd08,
-    ALU_SLTU = 4'd09,
-    ALU_SBT  = 4'd10,
-    ALU_SBTU = 4'd11,
-    ALU_EQ   = 4'd12,
-    ALU_NEQ  = 4'd13,
-    ALU_NOP  = 4'd15
+  typedef enum logic [6:0] {
+    LOAD  = 7'b0000011,
+    IMM   = 7'b0010011,
+    AUIPC = 7'b0010111,
+    STORE = 7'b0100011,
+    ARITHMETIC = 7'b0110011,
+    LUI   = 7'b0110111,
+    JUMP  = 7'b1100111,
+    JAL   = 7'b1101111
+  } RV32_INSTRUCTION_OPCODE;
+
+  typedef enum logic [2:0] {
+    ALU_ADD  = 3'b000,
+    ALU_SLL  = 3'b001,
+    ALU_SLT  = 3'b010,
+    ALU_SLTU = 3'b011,
+    ALU_XOR  = 3'b100,
+    ALU_SRx  = 3'b101,
+    ALU_OR   = 3'b110,
+    ALU_AND  = 3'b111
   } RV32_ALU_OPCODE;
+
+  typedef enum logic [9:0] {
+    INSTR_LUI   = 10'bxxx_0110111,
+    INSTR_AUIPC = 10'bxxx_0010111,
+    INSTR_JAL   = 10'bxxx_1101111,
+    INSTR_JALR  = 10'b000_1100111,
+    INSTR_BEQ   = 10'b000_1100011,
+    INSTR_BNE   = 10'b001_1100011,
+    INSTR_BLT   = 10'b100_1100011,
+    INSTR_BGE   = 10'b101_1100011,
+    INSTR_BLTU  = 10'b110_1100011,
+    INSTR_BGEU  = 10'b111_1100011,
+    INSTR_LB    = 10'b000_0000011,
+    INSTR_LH    = 10'b001_0000011,
+    INSTR_LW    = 10'b010_0000011,
+    INSTR_LBU   = 10'b100_0000011,
+    INSTR_LHU   = 10'b101_0000011,
+    INSTR_SB    = 10'b000_0100011,
+    INSTR_SH    = 10'b001_0100011,
+    INSTR_SW    = 10'b010_0100011,
+    INSTR_ADDI  = 10'b000_0010011,
+    INSTR_SLTI  = 10'b010_0010011,
+    INSTR_SLTIU = 10'b011_0010011,
+    INSTR_XORI  = 10'b100_0010011,
+    INSTR_ORI   = 10'b110_0010011,
+    INSTR_ANDI  = 10'b111_0010011,
+    INSTR_SLLI  = 10'b001_0010011,
+    INSTR_SRxI  = 10'b101_0010011,
+    INSTR_ADD   = 10'b000_0110011,
+    INSTR_SLL   = 10'b001_0110011,
+    INSTR_SLT   = 10'b010_0110011,
+    INSTR_SLTU  = 10'b011_0110011,
+    INSTR_XOR   = 10'b100_0110011,
+    INSTR_SRx   = 10'b101_0110011,
+    INSTR_OR    = 10'b110_0110011,
+    INSTR_AND   = 10'b111_0110011
+  } RV32_INSTRUCTION;
 
   typedef enum logic
   {
-    RS2 = 1'b0,
-    IMM = 1'b1
+    ALU_MUX_RS2 = 1'b0,
+    ALU_MUX_IMM = 1'b1
   } RV32_ALU_INPUT;
 
 endpackage
