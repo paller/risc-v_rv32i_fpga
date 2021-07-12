@@ -1,24 +1,22 @@
 module top_tb;
 
   logic rstN, clk;
-  logic [31:0] instruction;
 
-  top top(.rstN(rstN), .clk(clk), .instruction(instruction));
+  top top (
+      .rstN(rstN),
+      .clk(clk)
+  );
 
   initial begin
-    clk = 1;
-    rstN = 1;
- 
+    clk  = 1'b1;
+    rstN = 1'b1;
+
     // Reset
-    @(negedge clk)
-      rstN = 0;
-    @(negedge clk)
-      rstN = 1;
+    #1;
+    rstN = 1'b0;
+    @(negedge clk) rstN = 1'b1;
 
-    repeat(26)
-      @(posedge clk)
-        ;
-
+    repeat(50) @(posedge clk);
     $finish;
   end
 

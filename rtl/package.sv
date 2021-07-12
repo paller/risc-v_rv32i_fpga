@@ -1,5 +1,8 @@
 package rv;
 
+  typedef logic [31:0] RV32_DATA_T;
+  typedef logic [31:0] RV32_PC_T;
+
   typedef enum logic [6:0] {
     LOAD  = 7'b0000011,
     IMM   = 7'b0010011,
@@ -7,7 +10,8 @@ package rv;
     STORE = 7'b0100011,
     ARITHMETIC = 7'b0110011,
     LUI   = 7'b0110111,
-    JUMP  = 7'b1100111,
+    BRANCH = 7'b1100011,
+    JALR  = 7'b1100111,
     JAL   = 7'b1101111
   } RV32_INSTRUCTION_OPCODE;
 

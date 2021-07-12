@@ -7,6 +7,7 @@ filesets:
     files:
       - rtl/package.sv
       - rtl/top.sv
+      - rtl/controller.sv
       - rtl/program_counter.sv
       - rtl/decoder.sv
       - rtl/register_file.sv
@@ -58,7 +59,7 @@ targets:
     default_tool: xsim
     tools:
       xsim:
-        xelab_options: [-debug typical]
+        xelab_options: [-debug all]
         xsim_options: [-t ../src/rv32_0.0.1/test/xsim_script.tcl]
     filesets_append:
       - tb
